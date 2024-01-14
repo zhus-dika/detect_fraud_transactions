@@ -21,7 +21,6 @@ cursor = conn.cursor()
 now = datetime.now()
 today = now.strftime("%Y-%m-%d")
 #************************
-today = '2021-03-01'
 
 #read data from files
 df_terminals = read.terminals(today)
