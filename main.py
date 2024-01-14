@@ -2,8 +2,7 @@ import psycopg2
 from datetime import datetime
 from py_scripts import read_data as read
 from py_scripts import update_st_tables as update_tables
-from py_scripts import dwh_fact
-from py_scripts import dwh_dim_hist
+from py_scripts import dwh_fact, dwh_dim_hist, st_tables
 from config import DB_USERNAME, DB_PASSWORD, DB_PORT, DB_USER, DB_HOST
 
 # Создание подключения к PostgreSQL
@@ -36,7 +35,7 @@ update_tables.clean(cursor)
 
 #update stage tables
 update_tables.update(cursor, df_terminals, df_blacklist, df_transactions)
-
+# conn.commit()
 # fill data to DWH_FACT tables
 dwh_fact.fill(cursor)
 
@@ -48,6 +47,15 @@ dwh_dim_hist.update(cursor)
 dwh_dim_hist.find_del(cursor)
 
 dwh_dim_hist.add_deletions(cursor, today)
+
+#get data from stage tables
+df_clients = st_tables.clients(cursor)
+
+df_cards= st_tables.cards(cursor)
+
+df_accounts = st_tables.accounts(cursor)
+
+
 # conn.commit()
 # Закрываем соединение
 cursor.close()
