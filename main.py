@@ -2,7 +2,7 @@ import psycopg2
 from datetime import datetime
 from py_scripts import read_data as read
 from py_scripts import update_st_tables as update_tables
-from py_scripts import dwh_fact, dwh_dim_hist, st_tables, fraud_operations
+from py_scripts import dwh_fact, dwh_dim_hist, st_tables, fraud_operations, report
 from config import DB_USERNAME, DB_PASSWORD, DB_PORT, DB_USER, DB_HOST
 
 # Создание подключения к PostgreSQL
@@ -35,7 +35,8 @@ update_tables.clean(cursor)
 
 #update stage tables
 update_tables.update(cursor, df_terminals, df_blacklist, df_transactions)
-# conn.commit()
+conn.commit()
+
 # fill data to DWH_FACT tables
 dwh_fact.fill(cursor)
 
@@ -55,7 +56,7 @@ df_cards= st_tables.cards(cursor)
 
 df_accounts = st_tables.accounts(cursor)
 
-# Выявим мошеннические операции
+# detect fraud transactions
 df_trans_cards_accounts_clients_terminals = fraud_operations.prepare_working_df(df_transactions, df_cards, df_accounts, df_clients, df_terminals)
 
 #find 1st and 2d types fraud transactions
@@ -63,7 +64,11 @@ fraudulent_transactions = fraud_operations.detect12types(df_trans_cards_accounts
 
 #find 3d and 4th types fraud transactions
 fraudulent_transactions = fraud_operations.detect34types(df_trans_cards_accounts_clients_terminals, fraudulent_transactions, today)
-# conn.commit()
-# Закрываем соединение
+
+#prepare report
+report.make(cursor, fraudulent_transactions)
+conn.commit()
+
+# close connection
 cursor.close()
 conn.close()
