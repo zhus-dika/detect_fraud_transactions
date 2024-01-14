@@ -2,8 +2,9 @@ import psycopg2
 from datetime import datetime
 from py_scripts import read_data as read
 from py_scripts import update_st_tables as update_tables
-from config import DB_USERNAME, DB_PASSWORD, DB_PORT, DB_USER, DB_HOST
 from py_scripts import dwh_fact
+from py_scripts import dwh_dim_hist
+from config import DB_USERNAME, DB_PASSWORD, DB_PORT, DB_USER, DB_HOST
 
 # Создание подключения к PostgreSQL
 conn = psycopg2.connect(database = DB_USERNAME,
@@ -38,6 +39,15 @@ update_tables.update(cursor, df_terminals, df_blacklist, df_transactions)
 
 # fill data to DWH_FACT tables
 dwh_fact.fill(cursor)
+
+# fill data to DWH_DIM_HIST tables
+dwh_dim_hist.insert(cursor)
+
+dwh_dim_hist.update(cursor)
+
+dwh_dim_hist.find_del(cursor)
+
+dwh_dim_hist.add_deletions(cursor, today)
 # conn.commit()
 # Закрываем соединение
 cursor.close()
