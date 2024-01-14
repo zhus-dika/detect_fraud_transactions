@@ -13,10 +13,10 @@ def terminals(today):
     source = 'data/terminals_' + today_in_file + '.xlsx'
     target = 'archive/terminals_' + today_in_file + '.xlsx.backup'
 
-    shutil.copyfile(source, target)
+    # shutil.copyfile(source, target)
 
-    if os.path.exists('data/terminals_' + today_in_file + '.xlsx'):
-        os.remove('data/terminals_' + today_in_file + '.xlsx')
+    # if os.path.exists('data/terminals_' + today_in_file + '.xlsx'):
+    #     os.remove('data/terminals_' + today_in_file + '.xlsx')
     return df_terminals
 
 # read from passport_blacklist_.xlsx
@@ -28,10 +28,10 @@ def passport_blacklist(today):
     source = 'data/passport_blacklist_' + today_in_file + '.xlsx'
     target = 'archive/passport_blacklist_' + today_in_file + '.xlsx.backup'
 
-    shutil.copyfile(source, target)
+    # shutil.copyfile(source, target)
 
-    if os.path.exists('data/passport_blacklist_' + today_in_file + '.xlsx'):
-        os.remove('data/passport_blacklist_' + today_in_file + '.xlsx')
+    # if os.path.exists('data/passport_blacklist_' + today_in_file + '.xlsx'):
+    #     os.remove('data/passport_blacklist_' + today_in_file + '.xlsx')
 
     return df_blacklist
 
@@ -47,8 +47,8 @@ def transactions(today):
     source = 'data/transactions_' + today_in_file + '.txt'
     target = 'archive/transactions_' + today_in_file + '.txt.backup'
 
-    shutil.copyfile(source, target)
+    # shutil.copyfile(source, target)
 
-    if os.path.exists('data/transactions_' + today_in_file + '.txt'):
-        os.remove('data/transactions_' + today_in_file + '.txt')
+    # if os.path.exists('data/transactions_' + today_in_file + '.txt'):
+    #     os.remove('data/transactions_' + today_in_file + '.txt')
     return df_transactions
