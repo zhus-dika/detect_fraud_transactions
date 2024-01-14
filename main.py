@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 import py_scripts.read_data as read
+import py_scripts.update_st_tables as update_tables
 from config import DB_USERNAME, DB_PASSWORD, DB_PORT, DB_USER, DB_HOST
 
 # Создание подключения к PostgreSQL
@@ -24,9 +25,13 @@ df_terminals = read.terminals(today)
 
 df_transactions = read.transactions(today)
 
-passport_blacklist = read.passport_blacklist(today)
+df_blacklist = read.passport_blacklist(today)
 
-conn.commit()
+update_tables.clean(cursor)
+
+update_tables.update(cursor, df_terminals, df_blacklist, df_transactions)
+
+# conn.commit()
 # Закрываем соединение
 cursor.close()
 conn.close()
